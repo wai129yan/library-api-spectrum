@@ -23,8 +23,9 @@ class StoreAuthorRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'bio' => 'required|string',
-            'nationality' => 'required|string|max:255',
+            // Optional fields; DB allows null
+            'bio' => 'nullable|string',
+            'nationality' => 'nullable|string|max:255',
         ];
     }
 }

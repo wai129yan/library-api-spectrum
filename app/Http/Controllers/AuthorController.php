@@ -15,6 +15,7 @@ class AuthorController extends Controller
     public function index()
     {
         $authors = Author::withCount('books')->paginate(10);
+        // $authors = Author::with('books')->paginate(10);
         return AuthorResource::collection($authors)
             ->additional(["message" => 'Authors Fetched with success']);
 
@@ -32,9 +33,9 @@ class AuthorController extends Controller
     public function store(StoreAuthorRequest $request)
     {
         $author = Author::create($request->validated());
-        
+
         return new AuthorResource($author);
-        
+
         //way of simple json response
         // return response()->json([
         //     "author" => $author,
@@ -42,7 +43,7 @@ class AuthorController extends Controller
         // ], 201);
 
 
-        
+
         //Normal way
         // $author = Author::create([
         //     'name' => $request->name,
@@ -63,7 +64,7 @@ class AuthorController extends Controller
         $author = Author::find($id);
         if (!$author) {
             return response()->json([
-                'message' => 'Author not found'
+                "message" => 'Author not found'
             ], 404);
         }
         return new AuthorResource($author);
@@ -72,16 +73,20 @@ class AuthorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StoreAuthorRequest $request, Author $author)
     {
-        //
+        $author->update($request->validated());
+        return new AuthorResource($author);//go back to resource
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Author $author)
     {
-        //
+        $author->delete();
+        return response()->json([
+            "message" => 'Author Deleted with success'
+        ], 200);
     }
 }
