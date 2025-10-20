@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Author;
+use App\Models\Book;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +15,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Author::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Book::factory(30)
+        //     ->sequence(fn () => [
+        //         'author_id' => Author::query()->inRandomOrder()->value('id'),
+        //     ])
+        //     ->create();
     }
 }

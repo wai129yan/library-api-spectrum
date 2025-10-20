@@ -38,24 +38,26 @@ class BookController extends Controller
     {
         $book = Book::create($request->validated());
         $book->load('author');
-        return new BookResource($book);
+        return (new BookResource($book))
+            ->additional(['message' => 'Book created successfully']);
     }
 
     /**
      * Display the specified resource.
    */
-    
+
 //         // $book->load('author'); //to ask
 //         // return new BookResource($book);
 //         // $book->load('author');
 
-//         // //try catch 
+//         // //try catch
     public function show($id)
     {
         try {
             $book = Book::findOrFail($id);
             $book->load('author');
-            return new BookResource($book);
+            return (new BookResource($book))
+                ->additional(['message' => 'Book retrieved successfully']);
         } catch (\Exception $th) {
             return response()->json([
                 'status' => false,

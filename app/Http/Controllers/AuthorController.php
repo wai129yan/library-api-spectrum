@@ -34,26 +34,10 @@ class AuthorController extends Controller
     {
         $author = Author::create($request->validated());
 
-        return new AuthorResource($author);
-
-        //way of simple json response
-        // return response()->json([
-        //     "author" => $author,
-        //     "message" => 'Author Created with success'
-        // ], 201);
-
-
-
-        //Normal way
-        // $author = Author::create([
-        //     'name' => $request->name,
-        //     'bio'  => $request->bio,
-        //     'nationality' => $request->nationality
-        // ]);
-        // return response()->json([
-        //     "author" => $author,
-        //     "message" => 'Author Created with success'
-        // ], 201);
+        return (new AuthorResource($author))
+            ->additional(['message' => 'Author created successfully'])
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -61,13 +45,14 @@ class AuthorController extends Controller
      */
     public function show($id)
     {
-        $author = Author::find($id);
+        $author = Author::with('books')->find($id);
         if (!$author) {
             return response()->json([
                 "message" => 'Author not found'
             ], 404);
         }
-        return new AuthorResource($author);
+        return (new AuthorResource($author))
+            ->additional(['message' => 'Author retrieved successfully']);
     }
 
     /**
@@ -76,7 +61,8 @@ class AuthorController extends Controller
     public function update(StoreAuthorRequest $request, Author $author)
     {
         $author->update($request->validated());
-        return new AuthorResource($author);//go back to resource
+        return (new AuthorResource($author))
+            ->additional(['message' => 'Author updated successfully']);
     }
 
     /**
